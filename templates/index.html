@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<head>
+  <title>Hello world</title>
+  <script
+    src="https://unpkg.com/htmx.org@1.9.6"
+    integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+  <style>
+
+    .row-selector {
+      visibility:hidden
+    }
+
+    tr:hover .row-selector {
+      visibility:visible
+    }
+
+    tr:hover {
+      background-color:aquamarine;
+    }
+
+    tr {
+      cursor:pointer;
+    }
+
+    .row-selector:checked {
+      visibility:visible;
+    }
+
+  </style>
+</head>
+<body>
+  <div id="result"></div>
+  <form
+    method="post"
+    action="/export_csv"
+    hx-post="/",
+    hx-target="#table-container",
+  >
+    <div id="search-controls">
+      <label for="search">Search table: </label>
+      <input name="search" type="search"></input>
+    </div>
+    <div id="table-container">
+      {% include "table.html" %}
+    </div>
+    <span id="export-tsv-controls">
+      <button type="button">Export to TSV</button>
+    </span>
+  </form>
+</body>
+</html>

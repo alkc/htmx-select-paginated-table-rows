@@ -1,0 +1,53 @@
+<label for="nbr_rows_per_page">Items per page: </label>
+<select name="nbr_rows_per_page">
+  <option value="25">25</option>
+  <option value="50">50</option>
+  <option value="100">100</option>
+</select>
+<span id="page-navigation-controls">
+  <button type="button"
+          hx-vals="{'page' : '{{ selected_page - 1}}'}">−</button>
+  <select name="page">
+    {% for page_nbr in available_pages %}
+      <option value="{{page_nbr}}">{{page_nbr}}</option>
+    {% endfor %}
+  </select>
+  <button
+    type=button
+    hx-vals="{'page' : '{{ selected_page + 1}}'}">+</button>
+</span>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Diet</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in db_data %}
+      {% set row_selected = row['id'] in selected_rows %}
+      <tr _="on click toggle [@checked] on the .row-selector in me">
+        <td>
+          <input
+            class="row-selector"
+            type="checkbox"
+            name="selected-rows"
+            value="{{row['id']}}"
+            {% if row_selected %}
+              checked
+              {{selected_rows.remove(row['id'])}}
+            {% endif %}
+          >
+        </td>
+        <td>{{row['first_name']}}</td>
+        <td>{{row['last_name']}}</td>
+        <td>{{row['favorite_food']}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% for selected_row_id in selected_rows %}
+  <input type="hidden" name="selected-rows" value="{{selected_row_id}}">
+{% endfor %}
