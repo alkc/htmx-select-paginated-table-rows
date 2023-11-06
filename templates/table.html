@@ -1,20 +1,33 @@
-<label for="nbr_rows_per_page">Items per page: </label>
-<select name="nbr_rows_per_page">
+<label for="limit">Items per page: </label>
+<select name="limit">
   <option value="25">25</option>
   <option value="50">50</option>
   <option value="100">100</option>
 </select>
 <span id="page-navigation-controls">
   <button type="button"
-          hx-vals="{'page' : '{{ selected_page - 1}}'}">−</button>
-  <select name="page">
-    {% for page_nbr in available_pages %}
-      <option value="{{page_nbr}}">{{page_nbr}}</option>
+          hx-post="{{url_for('index')}}"
+          hx-target="#table-container"
+          hx-vals='{"page" : {{ selected_page - 1}}}'
+          {% if selected_page == 1 %}disabled{% endif %}>
+    −
+  </button>
+  <select
+    name="page"
+    {% if nbr_pages == 0 %}disabled{% endif %}
+  >
+    {% for page_nbr in range(1, nbr_pages + 1) %}
+      <option value="{{page_nbr}}"{% if page_nbr == selected_page %}selected{% endif %}>{{page_nbr}}</option>
     {% endfor %}
   </select>
   <button
     type=button
-    hx-vals="{'page' : '{{ selected_page + 1}}'}">+</button>
+    hx-post="{{url_for('index')}}"
+    hx-target="#table-container"
+    hx-vals='{"page" : {{ selected_page + 1}}}'
+    {% if selected_page >= nbr_pages %}disabled{% endif %}>
+    +
+  </button>
 </span>
 <table>
   <thead>

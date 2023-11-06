@@ -77,22 +77,20 @@ def index():
         search = request.form.get("search", None)
         selected_rows = set(request.form.getlist("selected-rows"))
 
-    db_data, nbr_total = get_table_rows(db, selected_page_nbr, nbr_table_rows_per_page, search)
+    db_data, nbr_total = get_table_rows(
+        db, selected_page_nbr, nbr_table_rows_per_page, search
+    )
 
     if (selected_page_nbr * nbr_table_rows_per_page) > nbr_total:
         selected_page_nbr = 1
 
     available_pages = math.ceil(nbr_total / nbr_table_rows_per_page)
-    if available_pages < 2:
-        available_pages = [1]
-    else:
-        available_pages = range(1, available_pages)
 
     return render_template(
         target_template,
         db_data=db_data,
         selected_rows=selected_rows,
-        available_pages=available_pages,
+        nbr_pages=available_pages,
         selected_page=selected_page_nbr,
     )
 

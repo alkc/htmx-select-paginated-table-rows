@@ -35,12 +35,15 @@
   <form
     method="post"
     action="/export_csv"
-    hx-post="/",
-    hx-target="#table-container",
+    hx-post="{{url_for('index')}}",
+    hx-target="#table-container"
+    hx-trigger="change, keyup delay:200ms, search"
   >
     <div id="search-controls">
       <label for="search">Search table: </label>
-      <input name="search" type="search"></input>
+      <input
+        name="search"
+        type="search">
     </div>
     <div id="table-container">
       {% include "table.html" %}
