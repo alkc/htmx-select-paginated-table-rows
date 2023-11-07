@@ -95,5 +95,19 @@ def index():
     )
 
 
+@app.post("/tsv")
+def create_tsv_report():
+    selected_rows = set(request.form.getlist("selected-rows"))
+
+    tsv_rows = []
+
+    for row in db:
+        if (curr_id := row.get("id")) in selected_rows:
+            tsv_rows.append(row)
+            selected_rows.remove(curr_id)
+
+    return tsv_rows
+
+
 if __name__ == "__main__":
     app.run(debug=True)

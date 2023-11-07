@@ -34,14 +34,16 @@
   <div id="result"></div>
   <form
     method="post"
-    action="/export_csv"
-    hx-post="{{url_for('index')}}",
+    hx-post="{{url_for('index')}}"
     hx-target="#table-container"
-    hx-trigger="change, keyup delay:200ms, search"
+    hx-trigger="change from #page-navigation-controls"
   >
     <div id="search-controls">
       <label for="search">Search table: </label>
       <input
+        hx-trigger="keyup changed delay:500ms, search"
+        hx-post="{{url_for('index')}}"
+        hx-target="#table-container"
         name="search"
         type="search">
     </div>
@@ -49,8 +51,12 @@
       {% include "table.html" %}
     </div>
     <span id="export-tsv-controls">
-      <button type="button">Export to TSV</button>
+      <button
+        type="button"
+        hx-post="{{url_for('create_tsv_report')}}"
+        hx-target="#report">Export to TSV</button>
     </span>
   </form>
+  <div id="report"></div>
 </body>
 </html>
