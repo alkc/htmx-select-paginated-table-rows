@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 # app.py
-from flask import Flask, render_template, request, abort
+from flask import Flask, render_template, request, abort, make_response
+from io import StringIO
 
 import csv
 import math
@@ -77,9 +78,7 @@ def index():
         search = request.form.get("search", None)
         selected_rows = set(request.form.getlist("selected-rows"))
 
-    db_data, nbr_total = get_table_rows(
-        db, selected_page_nbr, nbr_table_rows_per_page, search
-    )
+    db_data, nbr_total = get_table_rows(db, selected_page_nbr, nbr_table_rows_per_page, search)
 
     if (selected_page_nbr * nbr_table_rows_per_page) > nbr_total:
         selected_page_nbr = 1
@@ -97,16 +96,28 @@ def index():
 
 @app.post("/tsv")
 def create_tsv_report():
+    """Process list of db ids into TSV download"""
+
     selected_rows = set(request.form.getlist("selected-rows"))
 
-    tsv_rows = []
+    app.logger.debug(f"Processing {selected_rows} into TSV")
 
+    si = StringIO()
+    writer = csv.DictWriter(
+        si,
+        fieldnames=["first_name", "last_name", "favorite_food"],
+        extrasaction="ignore",
+        delimiter="\t",
+    )
+    writer.writeheader()
     for row in db:
         if (curr_id := row.get("id")) in selected_rows:
-            tsv_rows.append(row)
-            selected_rows.remove(curr_id)
+            writer.writerow(row)
 
-    return tsv_rows
+    output = make_response(si.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=export.tsv"
+    output.headers["Content-type"] = "text/tsv"
+    return output
 
 
 if __name__ == "__main__":
