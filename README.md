@@ -3,5 +3,5 @@ I want to select rows in a paginated table for export to TSV w/o storing state i
 
 ## TODO:
 
-- [ ] Pagination controls
+- [x] Pagination controls
 - [ ] Export selections to TSV

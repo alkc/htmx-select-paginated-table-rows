@@ -57,8 +57,8 @@ def get_table_rows(
 def index():
     target_template = "index.html"
 
-    nbr_table_rows_per_page = int(request.args.get("rows", 10))
     selected_page_nbr = int(request.args.get("page", 1))
+    selected_limit_nbr = int(request.args.get("limit", 10))
     search = request.args.get("search", None)
     selected_rows = set()
 
@@ -73,23 +73,24 @@ def index():
             case _:
                 return abort(400)
 
-        nbr_table_rows_per_page = int(request.form.get("rows", 10))
+        selected_limit_nbr = int(request.form.get("limit", 10))
         selected_page_nbr = int(request.form.get("page", 1))
         search = request.form.get("search", None)
         selected_rows = set(request.form.getlist("selected-rows"))
 
-    db_data, nbr_total = get_table_rows(db, selected_page_nbr, nbr_table_rows_per_page, search)
+    db_data, nbr_total = get_table_rows(db, selected_page_nbr, selected_limit_nbr, search)
 
-    if (selected_page_nbr * nbr_table_rows_per_page) > nbr_total:
+    if (selected_page_nbr * selected_limit_nbr) > nbr_total:
         selected_page_nbr = 1
 
-    available_pages = math.ceil(nbr_total / nbr_table_rows_per_page)
+    available_pages = math.ceil(nbr_total / selected_limit_nbr)
 
     return render_template(
         target_template,
         db_data=db_data,
         selected_rows=selected_rows,
         nbr_pages=available_pages,
+        nbr_limit=selected_limit_nbr,
         selected_page=selected_page_nbr,
     )
 
