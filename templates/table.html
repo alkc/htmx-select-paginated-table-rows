@@ -1,9 +1,9 @@
 <label for="limit">Items per page: </label>
 <select name="limit">
-  <option value="10" {% if page_limit == 10 %}selected{% endif %}>10</option>
-  <option value="25" {% if page_limit == 25 %}selected{% endif %}>25</option>
-  <option value="50" {% if page_limit == 50 %}selected{% endif %}>50</option>
-  <option value="100" {% if page_limit == 100 %}selected{% endif %}>100</option>
+  <option value="10" {% if nbr_limit == 10 %}selected{% endif %}>10</option>
+  <option value="25" {% if nbr_limit == 25 %}selected{% endif %}>25</option>
+  <option value="50" {% if nbr_limit == 50 %}selected{% endif %}>50</option>
+  <option value="100" {% if nbr_limit == 100 %}selected{% endif %}>100</option>
 </select>
 <span id="page-navigation-controls">
   <button type="button"
