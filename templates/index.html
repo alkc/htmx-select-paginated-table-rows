@@ -28,31 +28,24 @@
 </head>
 <body>
   <div id="result"></div>
-  <form
-    method="post"
-    hx-post="{{url_for('index')}}"
-    hx-target="#table-container"
-    hx-trigger="change from #page-navigation-controls"
-  >
-    <div id="search-controls">
-      <label for="search">Search table: </label>
-      <input
-        hx-trigger="keyup changed delay:500ms, search"
-        hx-post="{{url_for('index')}}"
-        hx-target="#table-container"
-        name="search"
-        type="search">
-    </div>
-    <div id="table-container">
-      {% include "table.html" %}
-    </div>
-    <span id="export-tsv-controls">
-      <button
-        type="button"
-        hx-post="{{url_for('create_tsv_report')}}"
-        hx-target="#report">Export to TSV</button>
-    </span>
-  </form>
+  <div id="search-controls">
+    <label for="search">Search table: </label>
+    <input
+      hx-trigger="keyup changed delay:500ms"
+      hx-post="{{url_for('index')}}"
+      hx-target="#table-container"
+      name="search"
+      type="search">
+  </div>
+  <div id="table-container">
+    {% include "table.html" %}
+  </div>
+  <span id="export-tsv-controls">
+    <button
+      type="button"
+      hx-post="{{url_for('create_tsv_report')}}"
+      hx-target="#report">Export to TSV</button>
+  </span>
   <div id="report"></div>
 </body>
 </html>
